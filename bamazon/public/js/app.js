@@ -1,4 +1,4 @@
-
+$(function () {
 
 //*************FUNCTION getOrderInfo*************** */
 // retrieves product and quantity ordered when order button is clicked
@@ -326,13 +326,13 @@ const queryLowInv = function () {
 
 //*************FUNCTION appUserInput*************** */
 // retrieves applicant's input data when submint button is clicked
-const newProdInput = function () {
+const newProdInput = function (event) {
     //Takes in the data from the applicant form and clears form after submit.
 
     // event.preventDefault() prevents the form from trying to submit itself.
     // We're using a form so that the user can hit enter instead of clicking the button if they want
 
-    // event.preventDefault();
+    event.preventDefault();
 
     console.log("add Product");
 
@@ -347,6 +347,7 @@ const newProdInput = function () {
         DepartmentId: ($('#dept').val()).slice(0,1)
     };
 
+    
     console.log ("newProduct", newProduct);
 
 
@@ -356,7 +357,8 @@ const newProdInput = function () {
         $('#stock-qty').val('');
         $('#image-url').val('');
         $('#dept').val('');
-        
+      
+    postNewProduct(newProduct);    
 };
 
 
@@ -384,6 +386,7 @@ const renderSupervisor = function (data) {
     };
   };
 
+//* FUNCTION */
 const totalSales = function(productList) {
     let sales = 0;
 
@@ -394,9 +397,74 @@ const totalSales = function(productList) {
         sales = sales + productList[i].quantity_purchased*productList[i].price
     }
     return sales;
-}
+};
 
 
+//***FUNCTION */
+//add a new product to the database
+const postNewProduct = function (data) {
+    
+    console.log("postNewProduct", data);
+
+    $.ajax({
+        method: 'POST',
+        url: ('/api/products'),        
+        data: data
+    }).then(function() {
+      console.log("POST");
+      });
+
+
+};
+
+//*************FUNCTION appUserInput*************** */
+// retrieves applicant's input data when submint button is clicked
+const newDeptInput = function (event) {
+    //Takes in the data from the applicant form and clears form after submit.
+
+    // event.preventDefault() prevents the form from trying to submit itself.
+    // We're using a form so that the user can hit enter instead of clicking the button if they want
+
+    event.preventDefault();
+
+    console.log("add Department");
+
+
+    //Grab the form elements and fill the applicant object
+    let newDepartment = {
+        department_name: $('#dept-name').val().trim(),
+        over_head_costs: $('#oh-cost').val().trim(),
+        
+    };
+
+    
+    console.log ("newDepartment", newDepartment);
+
+
+    //Clear the input form
+        $('#dept-name').val('');
+        $('#oh-cost').val('');
+        
+      
+    postNewDepartment(newDepartment);    
+};
+
+//***FUNCTION */
+//add a new department to the database
+const postNewDepartment = function (data) {
+    
+    console.log("postNewDepartment", data);
+
+    $.ajax({
+        method: 'POST',
+        url: ('/api/departments'),        
+        data: data
+    }).then(function() {
+      console.log("POST");
+      });
+
+
+};
 
 
 
@@ -407,15 +475,14 @@ $('#item-view').on('click', '.order-btn', getOrderInfo);
 // Adding a click event listener to all elements with a class of 'add-btn'
 $('#low-inventory').on('click', '.add-btn', getInventoryAdd);
 // Adding a click event listener to all elements with a class of 'add-btn'
-$('#new-product').on('click', '.add-prod-btn', newProdInput);
-
-
+$('#new-product').on('click', newProdInput);
+$('#new-department').on('click', newDeptInput);
 // Render all products
 // newProdInput();
 getProductsByDepartment();
 queryLowInv();
 
-
+});
 
 
 
