@@ -21,7 +21,7 @@ module.exports = function (app) {
     });
 
     //GET route for retreiving a single specified department
-    app.get('/api/departments/:id')
+    app.get('/api/departments/:id', function(req, res) {
 
     //Add an 'include' property to our options in our findOne query
     //Set the value to an array of the models we want to include in a left outer join
@@ -35,6 +35,8 @@ module.exports = function (app) {
         res.json(dbDepartment);
     }).catch(function (error) {
         res.json({ error: error });
+    });
+
     });
 
     //POST route for adding new departments

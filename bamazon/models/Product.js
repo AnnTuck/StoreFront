@@ -30,12 +30,20 @@ module.exports = function(connection, Sequelize) {
             }
         },
 
-        image_url: {
-            type: Sequelize.STRING,
+        quantity_purchased: {
+            type: Sequelize.INTEGER,
             allowNull: false,
             validate: {
-                notEmpty:true
+                notEmpty: true
             }
+        },
+
+        image_url: {
+            type: Sequelize.STRING,
+            allowNull: true,
+            // validate: {
+            //     notEmpty:true
+            // }
         }
 
     });
